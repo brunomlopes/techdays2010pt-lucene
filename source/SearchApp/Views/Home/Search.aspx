@@ -8,7 +8,7 @@
 
     <h2>Search</h2>
     <% foreach(var view in Model.Documents){ %>
-    <h3><%= view.Title %></h3>
-    <p><%=view.Text %></p>
+    <h3><a href="<%= view.Link %>"><%= view.Name %></a></h3>
+    <p><%=view.Description %></p>
     <%} %>
 </asp:Content>

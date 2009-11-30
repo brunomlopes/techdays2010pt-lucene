@@ -2,13 +2,15 @@
 {
     public class DocumentViewModel
     {
-        public DocumentViewModel(string title, string text)
+        public DocumentViewModel(string name, string description, string link)
         {
-            Title = title;
-            Text = text;
+            Name = name;
+            Description = description.Replace("\n","<br/>");
+            Link = "http://www.techdays2010.com"+link;
         }
 
-        public string Title { get; private set; }
-        public string Text { get; private set; }
+        public string Name { get; private set; }
+        public string Description { get; private set; }
+        public string Link { get; private set; }
     }
 }

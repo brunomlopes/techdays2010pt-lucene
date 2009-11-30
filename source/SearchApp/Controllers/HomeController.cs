@@ -40,9 +40,10 @@ namespace SearchApp.Controllers
             foreach (var scoreDoc in top10Results.scoreDocs)
             {
                 var document = searcher.Doc(scoreDoc.doc);
-                var title = document.GetField(Configuration.Fields.Title).StringValue();
-                var text = document.GetField(Configuration.Fields.Text).StringValue();
-                docs.Add(new DocumentViewModel(title, text));
+                var name = document.GetField(Configuration.Fields.Name).StringValue();
+                var description = document.GetField(Configuration.Fields.Description).StringValue();
+                var link = document.GetField(Configuration.Fields.Link).StringValue();
+                docs.Add(new DocumentViewModel(name, description, link));
             }
             return View(new SearchViewModel(docs));
         }
