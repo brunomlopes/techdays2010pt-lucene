@@ -16,18 +16,13 @@ namespace SearchApp.Controllers
             return View();
         }
 
-        public ActionResult About()
-        {
-            return View();
-        }
-
         public ActionResult Search(string query)
         {
             ViewData["Message"] = "query : " + query;
 
             var searcher = new IndexSearcher(Configuration.IndexDirectory);
 
-            var fieldsToSearchIn = new[] {Configuration.Fields.Title, Configuration.Fields.Text};
+            var fieldsToSearchIn = new[] {Configuration.Fields.Name, Configuration.Fields.Description};
             var queryanalizer = new MultiFieldQueryParser(fieldsToSearchIn,
                                                           new StandardAnalyzer());
 
