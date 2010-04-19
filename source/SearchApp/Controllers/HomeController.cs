@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.IO;
+using System.Web.Mvc;
 using Common;
 using Lucene.Net.Analysis.Br;
 using Lucene.Net.Analysis.Standard;
@@ -22,11 +23,13 @@ namespace SearchApp.Controllers
         {
             ViewData["Message"] = "query : " + query;
 
-            var searcher = new IndexSearcher(Configuration.IndexDirectory);
+            var searcher = new IndexSearcher(
+                new Lucene.Net.Store.SimpleFSDirectory(new DirectoryInfo(Configuration.IndexDirectory)),
+                readOnly: true);
 
             var fieldsToSearchIn = new[] {Configuration.Fields.Name, Configuration.Fields.Description};
             var queryanalizer = new MultiFieldQueryParser(Version.LUCENE_CURRENT,
-                                                            fieldsToSearchIn,
+                                                          fieldsToSearchIn,
                                                           new BrazilianAnalyzer());
 
             var numberOfResults = 10;
