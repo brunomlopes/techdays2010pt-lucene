@@ -71,19 +71,23 @@ namespace Indexer
             var speakerName = Path.GetFileName(speakerDirectory);
 
             var speakerNameField = new Field(Configuration.Fields.Name,
-                                             CharReader.Get(new StringReader(speakerName)));
+                                             speakerName,
+                                             Field.Store.YES, Field.Index.ANALYZED);
             document.Add(speakerNameField);
                 
             var speakerTypeField = new Field(Configuration.Fields.DocumentType,
-                                             CharReader.Get(new StringReader(DocumentTypes.Speaker.ToString())));
+                                             DocumentTypes.Speaker.ToString(),
+                                             Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS);
             document.Add(speakerTypeField);
 
             var speakerBioField = new Field(Configuration.Fields.Description,
-                                            new StreamReader(Path.Combine(speakerDirectory,"bio.txt")));
+                                            new StreamReader(Path.Combine(speakerDirectory,"bio.txt")).ReadToEnd(),
+                                            Field.Store.YES, Field.Index.ANALYZED);
             document.Add(speakerBioField);
                 
             var linkField = new Field(Configuration.Fields.Link,
-                                      new StreamReader(Path.Combine(speakerDirectory,"link.txt")));
+                                      new StreamReader(Path.Combine(speakerDirectory,"link.txt")).ReadToEnd(),
+                                      Field.Store.YES, Field.Index.ANALYZED);
             document.Add(linkField);
             return document;
         }
@@ -92,21 +96,26 @@ namespace Indexer
         {
             var sessionDocument = new Document();
             var sessionNameField = new Field(Configuration.Fields.Name,
-                                             new StreamReader(Path.Combine(sessionDirectory, "name.txt")));
+                                             new StreamReader(Path.Combine(sessionDirectory, "name.txt")).ReadToEnd(),
+                                             Field.Store.YES, Field.Index.ANALYZED);
             sessionDocument.Add(sessionNameField);
 
             var sessionTypeField = new Field(Configuration.Fields.DocumentType,
-                                             CharReader.Get(new StringReader(DocumentTypes.Session.ToString())));
+                                             DocumentTypes.Session.ToString(),
+                                             Field.Store.YES, Field.Index.ANALYZED);
             sessionDocument.Add(sessionTypeField);
 
 
             var sessionDescription = new Field(Configuration.Fields.Description,
-                                      new StreamReader(Path.Combine(sessionDirectory, "description.txt")));
+                                               new StreamReader(Path.Combine(sessionDirectory, "description.txt")).ReadToEnd(),
+                                               Field.Store.YES, Field.Index.ANALYZED);
             sessionDocument.Add(sessionDescription);
 
             var linkField = new Field(Configuration.Fields.Link,
-                                      CharReader.Get(new StringReader(link)));
+                                      link,
+                                      Field.Store.YES, Field.Index.ANALYZED);
             sessionDocument.Add(linkField);
+
             return sessionDocument;
         }
     }
