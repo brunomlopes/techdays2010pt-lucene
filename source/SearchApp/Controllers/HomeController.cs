@@ -1,8 +1,10 @@
 ﻿using System.Web.Mvc;
 using Common;
+using Lucene.Net.Analysis.Br;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
+using Lucene.Net.Util;
 
 namespace SearchApp.Controllers
 {
@@ -23,8 +25,9 @@ namespace SearchApp.Controllers
             var searcher = new IndexSearcher(Configuration.IndexDirectory);
 
             var fieldsToSearchIn = new[] {Configuration.Fields.Name, Configuration.Fields.Description};
-            var queryanalizer = new MultiFieldQueryParser(fieldsToSearchIn,
-                                                          new StandardAnalyzer());
+            var queryanalizer = new MultiFieldQueryParser(Version.LUCENE_CURRENT,
+                                                            fieldsToSearchIn,
+                                                          new BrazilianAnalyzer());
 
             var numberOfResults = 10;
             var top10Results = searcher.Search(queryanalizer.Parse(query), numberOfResults);
