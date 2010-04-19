@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using Common;
+using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
+using Lucene.Net.Util;
 
 namespace Indexer
 {
@@ -11,8 +13,8 @@ namespace Indexer
     {
         static void Main(string[] args)
         {
-            var indexWriter = new IndexWriter(Configuration.IndexDirectory,
-                                              new StandardAnalyzer(),
+            var indexWriter = new IndexWriter(new Lucene.Net.Store.SimpleFSDirectory(new DirectoryInfo(Configuration.IndexDirectory)),
+                                              new StandardAnalyzer(Version.LUCENE_CURRENT),
                                               true,
                                               IndexWriter.MaxFieldLength.UNLIMITED);
 
@@ -45,11 +47,11 @@ namespace Indexer
             var speakerName = Path.GetFileName(speakerDirectory);
 
             var speakerNameField = new Field(Configuration.Fields.Name,
-                                             new StringReader(speakerName));
+                                             CharReader.Get(new StringReader(speakerName)));
             document.Add(speakerNameField);
                 
             var speakerTypeField = new Field(Configuration.Fields.DocumentType,
-                                             new StringReader(DocumentTypes.Speaker.ToString()));
+                                             CharReader.Get(new StringReader(DocumentTypes.Speaker.ToString())));
             document.Add(speakerTypeField);
 
             var speakerBioField = new Field(Configuration.Fields.Description,
@@ -70,7 +72,7 @@ namespace Indexer
             sessionDocument.Add(sessionNameField);
 
             var sessionTypeField = new Field(Configuration.Fields.DocumentType,
-                                             new StringReader(DocumentTypes.Session.ToString()));
+                                             CharReader.Get(new StringReader(DocumentTypes.Session.ToString())));
             sessionDocument.Add(sessionTypeField);
 
 
@@ -79,7 +81,7 @@ namespace Indexer
             sessionDocument.Add(sessionDescription);
 
             var linkField = new Field(Configuration.Fields.Link,
-                                      new StringReader(link));
+                                      CharReader.Get(new StringReader(link)));
             sessionDocument.Add(linkField);
             return sessionDocument;
         }
