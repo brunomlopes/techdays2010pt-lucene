@@ -2,6 +2,7 @@
 using System.IO;
 using Common;
 using Lucene.Net.Analysis;
+using Lucene.Net.Analysis.Br;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
@@ -37,7 +38,7 @@ namespace Indexer
         static void Main(string[] args)
         {
             var indexWriter = new IndexWriter(new Lucene.Net.Store.SimpleFSDirectory(new DirectoryInfo(Configuration.IndexDirectory)),
-                                              new StandardAnalyzer(Version.LUCENE_CURRENT, PortugueseStopWords),
+                                              new BrazilianAnalyzer(PortugueseStopWords),
                                               true,
                                               IndexWriter.MaxFieldLength.UNLIMITED);
 
